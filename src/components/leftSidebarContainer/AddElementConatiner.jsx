@@ -13,7 +13,7 @@ const AddElementContainer = ()=>{
       </div>
       <div className="w-full border-t-2 border-gray-300 mt-2">
         {activeTab === 'Elements' ? 
-        <div>element</div> : 
+        <ElementContainer/>: 
         <div>Layouts</div>}
       </div>
     </div>
@@ -21,3 +21,12 @@ const AddElementContainer = ()=>{
 }
 
 export default AddElementContainer;
+
+
+const ElementContainer = ()=>{
+  return (
+    <div className="w-full h-full flex pt-3 pl-4">
+      <input type="text" placeholder="Search elements" className="w-[95%] placeholder:text-sm rounded-xs placeholder:p-1 border-2 border-gray-300"/>
+    </div>
+  )
+}
