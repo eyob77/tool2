@@ -1,7 +1,7 @@
 import { Box, Droplets, File, Images, ListFilter, Plus, Search, Settings, Variable, Zap } from "lucide-react";
 import { useState } from "react";
 import { HorizontalDivider } from "./utils";
-import AddElementContainer from "../leftSidebarContainer/AddElementConatiner";
+import AddElementContainer from "../leftSidebarContainer/AddElementConatiner/AddElementConatiner";
 import AssetContainer from "../leftSidebarContainer/AssetConatiner";
 import InteractionsContainer from "../leftSidebarContainer/InteractionsConatiner";
 import StyleSelectorContainer from "../leftSidebarContainer/StyleSelectorConatiner";
