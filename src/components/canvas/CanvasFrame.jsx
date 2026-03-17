@@ -1,6 +1,6 @@
 const CanvasFrame = ()=>{
   return (
-    <div className="w-[75%] h-full bg-white absolute left-[15%] top-0">
+    <div className="w-[77%] h-full bg-white absolute left-[12%] top-0">
       Canvas Frame
     </div>
   )

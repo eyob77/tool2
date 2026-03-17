@@ -16,42 +16,42 @@ import "react-tooltip/dist/react-tooltip.css";
 const linksTop = [
   {
     name: 'Add Element',
-    icon: <Plus/>,
+    icon: <Plus size={27}/>,
     id:1
   },
   {
     name: 'Pages',
-    icon: <File/>,
+    icon: <File size={27}/>,
     id:2
   },
   {
     name: 'Navigator',
-    icon: <ListFilter/>,
+    icon: <ListFilter size={27}/>,
     id:3
   },
   {
     name: 'Components',
-    icon: <Box/>,
+    icon: <Box size={27}/>,
     id:4
   },
   {
     name: 'Variables',
-    icon: <Variable/>,
+    icon: <Variable size={27}/>,
     id:5
   },
   {
     name: 'Style Selector',
-    icon: <Droplets/>,
+    icon: <Droplets size={27}/>,
     id:6
   },
   {
     name: 'Interactions',
-    icon: <Zap/>,
+    icon: <Zap size={27}/>,
     id:7
   },
   {
     name: 'Asset',
-    icon: <Images/>,
+    icon: <Images size={27}/>,
     id:8
   },
 ]
@@ -59,12 +59,12 @@ const linksTop = [
 const linksBottom = [
   {
     name: 'Settings',
-    icon: <Settings/>,
+    icon: <Settings size={27}/>,
     id:1
   },
   {
     name: 'Find Anything',
-    icon: <Search/>,
+    icon: <Search size={27}/>,
     id:2
   }
 ]
@@ -73,24 +73,24 @@ const LeftSidebar = ()=>{
   const [activeTab, setActiveTab] = useState('Navigator');
 
   return (
-    <div className="w-[15%] h-full border-r-2 border-gray-300 absolute left-0 top-0">
+    <div className="w-[12%] h-full border-r-2 border-gray-300 absolute left-0 top-0">
 
       <div className="w-full h-full flex">
-        <div className="flex-2 h-full flex flex-col justify-between px-1 py-2 border-r-2 border-gray-300">
+        <div className="w-[14%] h-full flex flex-col justify-between px-1 py-2 border-r-2 border-gray-300">
           <div className="w-full  flex flex-col items-center justify-center gap-1">
             {linksTop.map(link=>(
-              <>
+              <div key={link.id}>
                 <div
                   data-tooltip-id="sidebar-tooltip"
                   data-tooltip-content={link.name}
-                  key={link.id} 
+                   
                   onClick={()=>setActiveTab(link.name)} 
-                  className={`w-full h-10 flex items-center justify-start gap-2 px-2 rounded cursor-pointer ${activeTab === link.name ? 'bg-gray-300' : 'hover:bg-gray-00'}`}>
+                  className={`w-full h-10 flex items-center justify-center px-1 p-0 rounded cursor-pointer ${activeTab === link.name ? 'bg-gray-200' : 'hover:bg-gray-100'}`}>
                   {link.icon}
                   {/* <span className="text-xs">{link.name}</span> */}
                 </div>
                 {link.id === 3 && <HorizontalDivider />}
-              </>
+              </div>
             ))}
             <Tooltip id="sidebar-tooltip" place="right" offset={10}/>
           </div>
@@ -101,7 +101,7 @@ const LeftSidebar = ()=>{
                 data-tooltip-content={link.name}
                 key={link.id} 
                 onClick={()=>setActiveTab(link.name)} 
-                className={`w-full h-10 flex items-center justify-center gap-2 px-2 rounded cursor-pointer ${activeTab === link.name ? 'bg-gray-300' : 'hover:bg-gray-00'}`}>
+                className={`w-full h-10 flex items-center justify-center rounded cursor-pointer ${activeTab === link.name ? 'bg-gray-300' : 'hover:bg-gray-00'}`}>
                 {link.icon}
                 {/* <span className="text-xs">{link.name}</span> */}
               </div>
@@ -109,7 +109,7 @@ const LeftSidebar = ()=>{
             <Tooltip id="sidebar-tooltip" place="right" offset={10}/>
           </div>
         </div>
-        <div className="flex-13 h-full">
+        <div className="w-[95%] h-full">
           {activeTab === 'Add Element' && <AddElementContainer />}
           {activeTab === 'Pages' && <PagesContainer />}
           {activeTab === 'Navigator' && <NavigatorContainer />}

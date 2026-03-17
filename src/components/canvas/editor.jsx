@@ -4,7 +4,7 @@ import CanvasFrame from "./CanvasFrame";
 
 const Editor = () => {
   return (
-    <div className="w-screen h-[97%] relative left-0 top-[3%]">
+    <div className="w-screen h-[97%] relative left-0 top-[3%] overflow-x-hidden">
       <RightSidebar />
       <CanvasFrame />
       <LeftSidebar />
