@@ -16,42 +16,42 @@ import "react-tooltip/dist/react-tooltip.css";
 const linksTop = [
   {
     name: 'Add Element',
-    icon: <Plus size={27}/>,
+    icon: <Plus className="size-6 opacity-80"/>,
     id:1
   },
   {
     name: 'Pages',
-    icon: <File size={27}/>,
+    icon: <File  className="size-6 opacity-80" />,
     id:2
   },
   {
     name: 'Navigator',
-    icon: <ListFilter size={27}/>,
+    icon: <ListFilter className="size-6 opacity-80" />,
     id:3
   },
   {
     name: 'Components',
-    icon: <Box size={27}/>,
+    icon: <Box  className="size-6 opacity-80" />,
     id:4
   },
   {
     name: 'Variables',
-    icon: <Variable size={27}/>,
+    icon: <Variable className="size-6 opacity-80" />,
     id:5
   },
   {
     name: 'Style Selector',
-    icon: <Droplets size={27}/>,
+    icon: <Droplets className="size-6 opacity-80" />,
     id:6
   },
   {
     name: 'Interactions',
-    icon: <Zap size={27}/>,
+    icon: <Zap  className="size-6 opacity-80" />,
     id:7
   },
   {
     name: 'Asset',
-    icon: <Images size={27}/>,
+    icon: <Images className="size-6 opacity-80" />,
     id:8
   },
 ]
@@ -59,12 +59,12 @@ const linksTop = [
 const linksBottom = [
   {
     name: 'Settings',
-    icon: <Settings size={27}/>,
+    icon: <Settings className="size-6 opacity-80" />,
     id:1
   },
   {
     name: 'Find Anything',
-    icon: <Search size={27}/>,
+    icon: <Search className="size-6 opacity-80" />,
     id:2
   }
 ]
