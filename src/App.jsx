@@ -7,7 +7,7 @@ import Preview from './components/canvas/preview'
 function App() {
 
   return (
-    <main className='w-screen h-screen'>
+    <main className='w-screen h-screen overflow-hidden'>
       <Navbar />
       <Routes>
         <Route path='/design' element={<Editor/>} />

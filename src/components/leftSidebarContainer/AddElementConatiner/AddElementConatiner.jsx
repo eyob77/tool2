@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Collapsable } from "../../designer/utils";
+import { Collapsable, IconDisplayElement } from "../../designer/utils";
 import { Elements } from "./Eelements";
 
 
@@ -25,21 +25,55 @@ const AddElementContainer = ()=>{
 export default AddElementContainer;
 
 
-const ElementContainer = ()=>{
-  
+const ElementContainer = () => {
 
+  const [searchTerm,setSearchTerm] = useState("");
+
+  const filteredElements = Elements.map(e=>e.elements).flat().filter(item=>
+    item.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
   return (
+ 
     <div className="w-full h-full flex flex-col gap-3 pt-2">
-      <div className="pl-4">
-        <input type="text" placeholder="Search elements" className="w-[95%] h-30px placeholder:text-sm rounded-sm placeholder:indent-2 border-2 border-gray-300 focus:indent-2 focus:outline-none"/>
+      
+      {/* Search Bar Section: flex-none prevents it from shrinking */}
+      <div className="pl-4 flex-none">
+       <input 
+          type="text" 
+          placeholder="Search elements" 
+          value={searchTerm || ""}
+          onChange={(e) => {setSearchTerm(e.target.value)}} // 3. Update state on change
+          className="w-[95%] h-7.5 placeholder:text-sm rounded-sm placeholder:indent-2 border-2 border-gray-300 focus:indent-2 focus:outline-none"
+        />
       </div>
-      <div className="w-full h-full">
-        <div className="w-full h-full overflow-y-auto">
-          {Elements?.map((rowCollapsable,index)=>(
-            <Collapsable rowCollapsable={rowCollapsable} key={index}/>
-          ))}
+
+
+      <div className="flex-1 min-h-0 w-full">
+        <div className="w-full h-full overflow-y-auto pb-10 custom-scrollbar">
+          {searchTerm &&
+            <div className="w-full! h-max flex justify-center px-px! mb-2">
+                {filteredElements?.length > 0 ? (
+                  <div className="w-[99%] h-full grid grid-cols-3 rounded-sm gap-0.5">
+                    {filteredElements.map(( el,i) => (
+                      <IconDisplayElement Svg={el.svg} name={el.name} key={i}/>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="pl-4 text-gray-500 text-sm">No elements found.</div>
+                )}
+            </div>
+          }
+          {!searchTerm &&
+          <>
+            {Elements?.map((rowCollapsable, index) => (
+              <Collapsable rowCollapsable={rowCollapsable} key={index} />
+            ))}
+          </>
+          }
+          
         </div>
       </div>
+
     </div>
-  )
-}
+  );
+};

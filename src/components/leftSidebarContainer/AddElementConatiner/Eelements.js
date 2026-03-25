@@ -1,4 +1,4 @@
-import {ButtonBlock, CollectionListBlock, Container, DivBlock, HeadingBlock, HFlex, LinkBlock, ListBlock, ListItemBlock, ParagraphBlock, QuickStack, QuoteBlock, RichTextBlock, Section, TextBlock, TextLinkBlock, VFlex} from "../../svgs"
+import {ButtonBlock, CheckboxBlock, CollectionListBlock, Container, DivBlock, FileUploadInputBlock, FormBlock, HeadingBlock, HFlex, InputBlock, LableBlock, LinkBlock, ListBlock, ListItemBlock, ParagraphBlock, QuickStack, QuoteBlock, RadioButtonBlock, RichTextBlock, Section, SelectBlock, SubmiteButtonBlock, TextareaBlock, TextBlock, TextLinkBlock, VFlex} from "../../svgs"
 export const Elements = [
   {
     name:"Structure",
@@ -35,6 +35,20 @@ export const Elements = [
     name:"Collection List",
     elements:[
       {name:"Collection List",svg:CollectionListBlock},
+    ]
+  },
+  {
+    name:"Forms",
+    elements:[
+      {name:"Form Block" ,svg:FormBlock},
+      {name:"Label" ,svg:LableBlock},
+      {name:"Input" ,svg:InputBlock},
+      {name:"File Upload" ,svg:FileUploadInputBlock},
+      {name:"Text Area" ,svg:TextareaBlock},
+      {name:"Checkbox" ,svg:CheckboxBlock},
+      {name:"Radio Button" ,svg:RadioButtonBlock},
+      {name:"Select" ,svg:SelectBlock},
+      {name:"Form Button" ,svg:SubmiteButtonBlock},
     ]
   }
 ]

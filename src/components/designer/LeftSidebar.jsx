@@ -73,7 +73,7 @@ const LeftSidebar = ()=>{
   const [activeTab, setActiveTab] = useState('Navigator');
 
   return (
-    <div className="w-[12%] h-full border-r-2 border-gray-300 absolute left-0 top-0">
+    <div className="w-[13%] h-full border-r-2 border-gray-300 absolute left-0 top-0">
 
       <div className="w-full h-full flex">
         <div className="w-[14%] h-full flex flex-col justify-between px-1 py-2 border-r-2 border-gray-300">
