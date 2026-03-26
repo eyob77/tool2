@@ -15,8 +15,9 @@ const AddElementContainer = ()=>{
       </div>
       <div className="h-[94%] w-full border-t-2 border-gray-300">
         {activeTab === 'Elements' ? 
-        <ElementContainer />: 
-        <div>Layouts</div>}
+          <ElementContainer />: 
+          <LayoutContainer/>
+        }
       </div>
     </div>
   )
@@ -43,7 +44,7 @@ const ElementContainer = () => {
           placeholder="Search elements" 
           value={searchTerm || ""}
           onChange={(e) => {setSearchTerm(e.target.value)}} // 3. Update state on change
-          className="w-[95%] h-7.5 placeholder:text-sm rounded-sm placeholder:indent-2 border-2 border-gray-300 focus:indent-2 focus:outline-none"
+          className="indent-2 w-[95%] h-7.5 placeholder:text-sm rounded-sm placeholder:indent-2 border-2 border-gray-300 focus:indent-2 focus:outline-none text-sm"
         />
       </div>
 
@@ -77,3 +78,11 @@ const ElementContainer = () => {
     </div>
   );
 };
+
+const LayoutContainer =()=>{
+  return (
+    <div>
+      hi layout
+    </div>
+  )
+}
