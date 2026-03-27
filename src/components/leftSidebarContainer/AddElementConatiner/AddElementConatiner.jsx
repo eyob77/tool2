@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Collapsable, IconDisplayElement } from "../../designer/utils";
 import { Elements } from "./Eelements";
+import { useBuilder } from "../../../context/builderContext";
 
 
 const AddElementContainer = ()=>{
@@ -33,6 +34,12 @@ const ElementContainer = () => {
   const filteredElements = Elements.map(e=>e.elements).flat().filter(item=>
     item.name?.toLowerCase().includes(searchTerm.toLowerCase())
   )
+  const { setIsDragging } = useBuilder();
+
+  const handleDragStart = (e, type) => {
+    setIsDragging(true);
+    e.dataTransfer.setData("compType", type);
+  };
   return (
  
     <div className="w-full h-full flex flex-col gap-3 pt-2">
@@ -50,7 +57,7 @@ const ElementContainer = () => {
 
 
       <div className="flex-1 min-h-0 w-full">
-        <div className="w-full h-full overflow-y-auto pb-10 custom-scrollbar">
+        {/* <div className="w-full h-full overflow-y-auto pb-10 custom-scrollbar">
           {searchTerm &&
             <div className="w-full! h-max flex justify-center px-px! mb-2">
                 {filteredElements?.length > 0 ? (
@@ -72,6 +79,27 @@ const ElementContainer = () => {
           </>
           }
           
+        </div> */}
+        <div className="w-64 bg-white border-r p-4 flex flex-col gap-4">
+          <h2 className="font-bold text-gray-500 text-sm uppercase">
+            Components
+          </h2>
+
+          <div
+            draggable
+            onDragStart={(e) => handleDragStart(e, 'heading')}
+            className="p-4 border-2 border-dashed border-gray-300 rounded cursor-move hover:border-blue-500"
+          >
+            Heading
+          </div>
+
+          <div
+            draggable
+            onDragStart={(e) => handleDragStart(e, 'button')}
+            className="p-4 border-2 border-dashed border-gray-300 rounded cursor-move hover:border-blue-500"
+          >
+            Button
+          </div>
         </div>
       </div>
 
