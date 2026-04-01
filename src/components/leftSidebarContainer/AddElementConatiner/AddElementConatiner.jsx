@@ -100,6 +100,13 @@ const ElementContainer = () => {
           >
             Button
           </div>
+          <div
+            draggable
+            onDragStart={(e) => handleDragStart(e, 'section')}
+            className="p-4 border-2 border-dashed border-gray-300 rounded cursor-move hover:border-blue-500"
+          >
+            Container
+          </div>
         </div>
       </div>
 

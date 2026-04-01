@@ -49,3 +49,18 @@ export const IconDisplayElement = ({ Svg, name }) => {
     </div>
   );
 };
+
+// Function to remove a node by ID from anywhere in the tree
+export const removeNode = (nodes, id) => {
+  if (Array.isArray(nodes)) {
+    return nodes
+      .filter(node => node.id !== id)
+      .map(node => ({ ...node, children: node.children ? removeNode(node.children, id) : [] }));
+  }
+  return {
+    ...nodes,
+    children: nodes.children ? removeNode(nodes.children, id) : []
+  };
+};
+
+// In your Canvas.jsx DROP handler:
