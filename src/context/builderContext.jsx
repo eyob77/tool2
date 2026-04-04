@@ -5,6 +5,7 @@ const BuilderContext = createContext();
 export const BuilderProvider = ({ children }) => {
   const iframeRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [treeMirror, setTreeMirror] = useState(null);
 
   const sendMessage = (message) => {
     if (iframeRef.current) {
@@ -14,7 +15,7 @@ export const BuilderProvider = ({ children }) => {
   };
 
   return (
-    <BuilderContext.Provider value={{ iframeRef, isDragging, setIsDragging, sendMessage }}>
+    <BuilderContext.Provider value={{ treeMirror,setTreeMirror,iframeRef, isDragging, setIsDragging, sendMessage }}>
       {children}
     </BuilderContext.Provider>
   );

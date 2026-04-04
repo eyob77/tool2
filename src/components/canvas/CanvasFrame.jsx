@@ -2,11 +2,15 @@ import { useEffect, useRef, useMemo } from 'react';
 import { useBuilder } from '../../context/builderContext';
 
 const CanvasFrame = () => {
-  const { iframeRef, isDragging, setIsDragging, sendMessage } = useBuilder();
+  const { iframeRef, isDragging, setIsDragging, sendMessage,setTreeMirror } = useBuilder();
 
   // 1. Listen for messages FROM the iframe
   useEffect(() => {
-    const handleInternalMessages = (e) => {
+      const handleInternalMessages = (e) => {
+        if (e.data.type === 'TREE_UPDATE') {
+          // We received the new tree from the Iframe!
+          setTreeMirror(e.data.payload);
+        }
       // Security check: only listen to messages from your own site
       if (e.origin !== window.location.origin) return;
 

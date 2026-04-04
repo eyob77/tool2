@@ -63,6 +63,7 @@ const Canvas = () => {
   const [movingId, setMovingId] = useState(null);
 
   // --- REFINED TREE HELPERS ---
+  
   const findAndRemove = (node, id) => {
     if (!node.children) return { node: null, newTree: node };
     const index = node.children.findIndex(c => c.id === id);
@@ -87,7 +88,7 @@ const Canvas = () => {
     if (position === 'inside' && node.id === targetId) {
       return { ...node, children: [...(node.children || []), element] };
     }
-
+    
     // 2. Handle Sibling Drop (Before/After)
     if (node.children) {
       const index = node.children.findIndex(c => c.id === targetId);
@@ -101,7 +102,15 @@ const Canvas = () => {
     }
     return node;
   };
-
+  
+  useEffect(() => {
+    // Every time the tree changes, send a copy to the Parent
+    window.parent.postMessage({
+      type: 'TREE_UPDATE',
+      payload: tree
+    }, window.location.origin);
+  }, [tree]);
+  
   useEffect(() => {
     const handleMessage = (e) => {
       if (!e.data || !e.data.type) return;
