@@ -2,7 +2,7 @@ import { useEffect, useRef, useMemo } from 'react';
 import { useBuilder } from '../../context/builderContext';
 
 const CanvasFrame = () => {
-  const { iframeRef, isDragging, setIsDragging, sendMessage,setTreeMirror } = useBuilder();
+  const { iframeRef, isDragging, setIsDragging,setSelectedId, sendMessage,setTreeMirror } = useBuilder();
 
   // 1. Listen for messages FROM the iframe
   useEffect(() => {
@@ -26,6 +26,33 @@ const CanvasFrame = () => {
     window.addEventListener('message', handleInternalMessages);
     return () => window.removeEventListener('message', handleInternalMessages);
   }, [setIsDragging, sendMessage]);
+
+  // Inside CanvasFrame.jsx
+useEffect(() => {
+  const handleMessagesFromIframe = (e) => {
+    const { type, payload } = e.data;
+
+    // 1. When an element is clicked inside the iframe
+   if (e.data.type === 'SELECT_ELEMENT') {
+  setSelectedId(e.data.payload.id); // Update Parent Context
+  
+  // ECHO it back to the Iframe so Canvas state updates locally
+  sendMessage({
+    type: 'SELECT_ELEMENT',
+    payload: { id: e.data.payload.id }
+  });
+}
+    // 2. When the tree changes (drag/drop or style edit)
+    if (type === 'TREE_UPDATE') {
+      setTreeMirror(payload);
+    }
+    
+    // ... keep your existing INTERNAL_DRAG_START logic
+  };
+
+  window.addEventListener('message', handleMessagesFromIframe);
+  return () => window.removeEventListener('message', handleMessagesFromIframe);
+}, [setSelectedId, setTreeMirror]);
 
   // 2. Throttle logic to keep the UI smooth (60fps)
   const throttledSendMessage = useMemo(() => {
@@ -67,9 +94,9 @@ const CanvasFrame = () => {
   };
 
   return (
-    <div className="w-[77%] h-full bg-white absolute left-[13%] top-0 shadow-inner overflow-hidden">
+    <div className="w-[78%] h-full bg-white absolute left-[12%] top-0 shadow-inner overflow-hidden">
       <div className="flex h-screen w-full bg-gray-100">
-        <div className="flex-1 p-10 relative flex flex-col items-center">
+        <div className="flex-1 p-5 relative flex flex-col items-center">
           
           {/* THE SHIELD 🛡️ */}
           {isDragging && (

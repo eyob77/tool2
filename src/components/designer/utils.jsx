@@ -9,6 +9,25 @@ export const HorizontalDivider = ()=>{
 
 // export const VerticalDivider = <div className="w-px h-full bg-gray-300 mx-2"/>
 
+export const ModifiedCollapsable = ({ rowCollapsable }) => {
+  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
+  return (
+    <>
+      <button {...getToggleProps()} className="w-[95%] h-[5%] rounded-sm pl-4">
+        <span className="flex justify-between items-center text-sm font-bold">
+          <span className="font-normal">{rowCollapsable.name}</span>
+          {isExpanded ? <ChevronDown className="size-4"/>:<ChevronRight className="size-4"/>}
+        </span>
+      </button>
+      <section {...getCollapseProps()} className="w-full! h-max flex justify-center px-px! mb-2">
+        <div className="w-[99%] h-full ">
+          {rowCollapsable.element}
+        </div>
+      </section>
+    </>
+  )
+}
+
 
 export const Collapsable=({rowCollapsable})=>{
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse()
@@ -61,6 +80,48 @@ export const removeNode = (nodes, id) => {
     ...nodes,
     children: nodes.children ? removeNode(nodes.children, id) : []
   };
+};
+
+import { useState, useRef, useEffect } from 'react';
+
+export const OptionsPopover = ({ children,Icon,text }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef(null);
+
+  // Close the mini-modal if the user clicks anywhere outside of it
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        setIsVisible(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative inline-block" ref={containerRef}>
+      {/* The "More Options" Trigger */}
+      <button
+        onClick={() => setIsVisible(!isVisible)}
+        className=" hover:bg-gray-100 border-gray-200 transition-colors"
+      >
+        {Icon && <Icon />}
+        {text && <span className="text-sm font-medium">{text}</span>}
+      </button>
+
+      {/* The Mini-Modal (Hidden & Uninteractive when isVisible is false) */}
+      {isVisible && (
+        <div className="w-44 absolute right-6 mt-3 z-50 bg-white rounded shadow-xl border border-gray-200 p-2">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1 justify-center">
+               {children}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 // In your Canvas.jsx DROP handler:

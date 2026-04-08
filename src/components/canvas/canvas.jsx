@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
-const ElementRenderer = ({ element, dropTarget }) => {
+const ElementRenderer = ({ element, dropTarget, selectedId }) => {
   const isContainer = element.type === 'section' || element.type === 'root';
   const isTarget = dropTarget?.id === element.id;
+  const isSelected = selectedId === element.id;
+
+  const inlineStyles = {
+    ...element.styles,
+    minHeight: isContainer && !element.styles?.height ? '80px' : element.styles?.height,
+  };
+
+  const handleSelect = (e) => {
+    e.stopPropagation();
+    // Notify the Parent (BuilderContext) that this ID is now active
+    window.parent.postMessage({ type: 'SELECT_ELEMENT', payload: { id: element.id } }, '*');
+  };
 
   const handleInternalDragStart = (e) => {
     e.stopPropagation();
@@ -14,9 +26,9 @@ const ElementRenderer = ({ element, dropTarget }) => {
 
   return (
     <div className="relative group">
-      {/* 🟢 TOP SIBLING INDICATOR */}
+      {/* Visual Sibling Indicators */}
       {isTarget && dropTarget.position === 'before' && (
-        <div className="absolute -top-1 left-0 w-full h-1 bg-blue-500 z-50 rounded shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+        <div className="absolute -top-1 left-0 w-full h-0.5 bg-blue-500 z-50 rounded shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
       )}
 
       <div
@@ -24,72 +36,58 @@ const ElementRenderer = ({ element, dropTarget }) => {
         data-is-container={isContainer}
         draggable={element.type !== 'root'}
         onDragStart={handleInternalDragStart}
+        onClick={handleSelect}
+        style={inlineStyles}
         className={`
           relative p-4 transition-all duration-200 cursor-grab active:cursor-grabbing
-          ${isContainer ? 'min-h-20 border-2 border-dashed my-2' : 'border border-gray-200 bg-white my-1'}
-          ${isContainer ? 'border-gray-300 bg-blue-50/5' : 'rounded shadow-sm'}
-          ${isTarget && dropTarget.position === 'inside' ? 'ring-2 ring-blue-500 bg-blue-100/30' : ''}
+          ${isContainer ? 'border-2 border-dashed' : 'border'}
+          ${isSelected ? 'ring-1 ring-blue-600 border-transparent z-20' : 'border-gray-200 hover:border-blue-300'}
+          ${isTarget && dropTarget.position === 'inside' ? 'bg-blue-100/30' : ''}
         `}
       >
-        <div className="absolute -top-2.5 left-2 bg-blue-500 text-white text-[10px] px-1 opacity-0 group-hover:opacity-100 uppercase z-10">
+        {/* Component Label - Visible on hover or when selected */}
+        <div className={`absolute -top-4 left-2 bg-blue-600 text-white text-[10px] rounded-t-sm px-1  capitalize z-30 pointer-events-none transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
           {element.type}
         </div>
 
-        {element.type === 'heading' && <h1 className="text-2xl font-bold text-gray-800">Heading</h1>}
-        {element.type === 'button' && <button className="bg-black text-white px-4 py-2 text-sm rounded">Button</button>}
+        {/* Content Renderers */}
+        {element.type === 'heading' && <h1 className=" font-bold pointer-events-none">{element.content || 'Heading'}</h1>}
+        {element.type === 'button' && <button className="px-4 py-2 bg-gray-900 text-white rounded pointer-events-none">{element.content || 'Button'}</button>}
 
-        {isContainer && element.children && (
-          <div className="mt-2 flex flex-col gap-1 pointer-events-none min-h-10">
-            {element.children.map((child) => (
-              <div key={child.id} className="pointer-events-auto">
-                <ElementRenderer element={child} dropTarget={dropTarget} />
-              </div>
+        {/* Recursive Children Render */}
+        {isContainer && (
+          <div className="mt-2 flex flex-col gap-1 min-h-10">
+             {/* Note: We removed pointer-events-none from the wrapper to ensure clicks hit children reliably */}
+            {element.children?.map((child) => (
+               <ElementRenderer key={child.id} element={child} dropTarget={dropTarget} selectedId={selectedId} />
             ))}
           </div>
         )}
       </div>
 
-      {/* 🔴 BOTTOM SIBLING INDICATOR */}
       {isTarget && dropTarget.position === 'after' && (
-        <div className="absolute -bottom-1 left-0 w-full h-1 bg-blue-500 z-50 rounded shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+        <div className="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-500 z-50 rounded shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
       )}
     </div>
   );
 };
 
 const Canvas = () => {
-  const [tree, setTree] = useState({ id: 'root-canvas', type: 'root', children: [] });
-  const [dropTarget, setDropTarget] = useState(null); // { id, position: 'before' | 'after' | 'inside' }
+  const [tree, setTree] = useState({ id: 'root-canvas', type: 'root', children: [], styles: {} });
+  const [dropTarget, setDropTarget] = useState(null);
   const [movingId, setMovingId] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
-  // --- REFINED TREE HELPERS ---
-  
-  const findAndRemove = (node, id) => {
-    if (!node.children) return { node: null, newTree: node };
-    const index = node.children.findIndex(c => c.id === id);
-    if (index !== -1) {
-      const found = node.children[index];
-      const newChildren = node.children.filter(c => c.id !== id);
-      return { found, newNode: { ...node, children: newChildren } };
-    }
-    const newChildren = node.children.map(c => {
-      const result = findAndRemove(c, id);
-      if (result.found) {
-        c = result.newNode;
-        this.tempFound = result.found;
-      }
-      return c;
-    });
-    return { found: this.tempFound, newNode: { ...node, children: newChildren } };
-  };
+  // Sync tree with Parent whenever it changes
+  useEffect(() => {
+    window.parent.postMessage({ type: 'TREE_UPDATE', payload: tree }, '*');
+  }, [tree]);
 
+  // --- TREE HELPERS ---
   const insertIntoTree = (node, targetId, element, position) => {
-    // 1. Handle Inside Drop
     if (position === 'inside' && node.id === targetId) {
       return { ...node, children: [...(node.children || []), element] };
     }
-    
-    // 2. Handle Sibling Drop (Before/After)
     if (node.children) {
       const index = node.children.findIndex(c => c.id === targetId);
       if (index !== -1 && position !== 'inside') {
@@ -102,45 +100,55 @@ const Canvas = () => {
     }
     return node;
   };
-  
-  useEffect(() => {
-    // Every time the tree changes, send a copy to the Parent
-    window.parent.postMessage({
-      type: 'TREE_UPDATE',
-      payload: tree
-    }, window.location.origin);
-  }, [tree]);
-  
+
   useEffect(() => {
     const handleMessage = (e) => {
       if (!e.data || !e.data.type) return;
       const { type, payload } = e.data;
 
+      // 1. SELECT_ELEMENT: This happens when the Navigator in the sidebar is clicked
+      if (type === 'SELECT_ELEMENT') {
+        setSelectedId(payload.id);
+      }
+
+      // 2. UPDATE_ELEMENT: This happens when the Style Panel sliders change
+      if (type === 'UPDATE_ELEMENT') {
+        setTree(prevTree => {
+          const updateRecursive = (node) => {
+            if (node.id === payload.id) {
+              const { styles, ...otherData } = payload;
+              return { 
+                ...node, 
+                ...otherData, 
+                styles: { ...node.styles, ...styles } 
+              };
+            }
+            if (node.children) {
+              return { ...node, children: node.children.map(updateRecursive) };
+            }
+            return node;
+          };
+          return updateRecursive(prevTree);
+        });
+      }
+
+      // 3. DRAGGING / DROP Logic
       if (type === 'DRAGGING') {
         const hoveredEl = document.elementFromPoint(payload.x, payload.y);
         const item = hoveredEl?.closest('[data-id]');
-        
         if (item) {
           const id = item.getAttribute('data-id');
           if (id === movingId) return;
-
           const isContainer = item.getAttribute('data-is-container') === 'true';
           const rect = item.getBoundingClientRect();
           const relativeY = payload.y - rect.top;
-          const threshold = rect.height * 0.25; // 25% zone for edges
+          const threshold = rect.height * 0.25;
 
-          if (id === 'root-canvas') {
-             setDropTarget({ id, position: 'inside' });
-          } else if (relativeY < threshold) {
-            setDropTarget({ id, position: 'before' });
-          } else if (relativeY > rect.height - threshold) {
-            setDropTarget({ id, position: 'after' });
-          } else if (isContainer) {
-            setDropTarget({ id, position: 'inside' });
-          } else {
-            // If it's a non-container (button/h1), drop before or after based on half-way point
-            setDropTarget({ id, position: relativeY < rect.height / 2 ? 'before' : 'after' });
-          }
+          if (id === 'root-canvas') setDropTarget({ id, position: 'inside' });
+          else if (relativeY < threshold) setDropTarget({ id, position: 'before' });
+          else if (relativeY > rect.height - threshold) setDropTarget({ id, position: 'after' });
+          else if (isContainer) setDropTarget({ id, position: 'inside' });
+          else setDropTarget({ id, position: relativeY < rect.height / 2 ? 'before' : 'after' });
         }
       }
 
@@ -153,7 +161,6 @@ const Canvas = () => {
             let currentTree = { ...prevTree };
 
             if (movingId) {
-              // Standard Recursive Find & Remove
               const findNode = (n, id) => {
                 if (n.id === id) return n;
                 for (let c of (n.children || [])) {
@@ -162,7 +169,6 @@ const Canvas = () => {
                 }
               };
               elementToInsert = { ...findNode(prevTree, movingId) };
-              
               const removeAnywhere = (n, id) => ({
                 ...n,
                 children: n.children?.filter(c => c.id !== id).map(c => removeAnywhere(c, id))
@@ -172,6 +178,7 @@ const Canvas = () => {
               elementToInsert = {
                 id: crypto.randomUUID(),
                 type: payload.type,
+                styles: { padding: '20px', display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff' },
                 children: payload.type === 'section' ? [] : undefined
               };
             }
@@ -190,7 +197,8 @@ const Canvas = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
       <div className="w-full bg-white min-h-screen shadow-sm">
-        <ElementRenderer element={tree} dropTarget={dropTarget} />
+        {/* Pass selectedId down so the renderer can show the blue ring */}
+        <ElementRenderer element={tree} dropTarget={dropTarget} selectedId={selectedId} />
       </div>
     </div>
   );
