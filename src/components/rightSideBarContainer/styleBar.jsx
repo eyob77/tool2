@@ -1,6 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import { useBuilder } from "../../context/builderContext";
-import {  OptionsPopover } from "../designer/utils";
+import {  ModifiedCollapsable, OptionsPopover, SizeSettings, SpacingEditor } from "../designer/utils";
 
 const StylePanel = () => {
   const { selectedId, treeMirror, sendMessage } = useBuilder();
@@ -44,71 +44,87 @@ const StylePanel = () => {
   if (!activeElement) return <div className="p-4 text-gray-400 text-sm">Select an element</div>;
 
   return (
-    <div className="w-full h-full overflow-y-auto pl-4 pt-4 pr-1">
+    <div className="w-full h-full overflow-y-auto flex flex-col">
 
       {/* --- LAYER INFO --- */}
-      <div className="flex items-center gap-3 p-1">
-  <span className="text-xs font-medium text-gray-700 flex-1">Display</span>
-  <div className="flex items-center flex-2 gap-1 px-1 py-0.5 border border-gray-200 rounded-md bg-white shadow-sm">
-    <button 
-      onClick={() => updateStyle('display', 'block')} 
-      className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-    >
-      Block
-    </button>
-    <button 
-      onClick={() => updateStyle('display', 'flex')} 
-      className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-    >
-      Flex
-    </button>
-    <button 
-      onClick={() => updateStyle('display', 'grid')} 
-      className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-    >
-      Grid
-    </button>
-    <button 
-      onClick={() => updateStyle('display', 'none')} 
-      className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-    >
-      None
-    </button>
-    
-    <div className="w-px h-4 bg-gray-200 mx-1" /> {/* Subtle Divider */}
+      <div className="w-full py-2 border-b border-gray-200 pl-4 pr-2 ">
+        <ModifiedCollapsable styleCategory="Layout">
+          <div className="flex items-center gap-2p-1">
+          <span className="text-xs font-medium text-gray-700 flex-1">Display</span>
+          <div className="flex items-center flex-2 gap-1 px-1 py-0.5 border border-gray-200 rounded-md bg-white shadow-sm">
+            <button 
+              onClick={() => updateStyle('display', 'block')} 
+              className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+            >
+              Block
+            </button>
+            <button 
+              onClick={() => updateStyle('display', 'flex')} 
+              className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+            >
+              Flex
+            </button>
+            <button 
+              onClick={() => updateStyle('display', 'grid')} 
+              className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+            >
+              Grid
+            </button>
+            <button 
+              onClick={() => updateStyle('display', 'none')} 
+              className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+            >
+              None
+            </button>
+        
+            <div className="w-px h-4 bg-gray-200 mx-1" /> {/* Subtle Divider */}
 
-    <OptionsPopover Icon={() => <ChevronDown className="size-3.5 text-gray-500"/>}>
-      <button 
-        onClick={() => updateStyle('display', 'inline-block')} 
-        className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-      >
-        Inline-Block
-      </button>
-      <button 
-        onClick={() => updateStyle('display', 'inline-flex')} 
-        className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-      >
-        Inline-Flex
-      </button>
-      <button 
-        onClick={() => updateStyle('display', 'inline-grid')} 
-        className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-      >
-        Inline-grid
-      </button>
-      <button 
-        onClick={() => updateStyle('display', 'inline')} 
-        className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-      >
-       Inline
-      </button>
+              <OptionsPopover Icon={() => <ChevronDown className="size-3.5 text-gray-500"/>}>
+              <button 
+                onClick={() => updateStyle('display', 'inline-block')} 
+                className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+              >
+                Inline-Block
+              </button>
+              <button 
+                onClick={() => updateStyle('display', 'inline-flex')} 
+                className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+              >
+                Inline-Flex
+              </button>
+              <button 
+                onClick={() => updateStyle('display', 'inline-grid')} 
+                className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+              >
+                Inline-grid
+              </button>
+              <button 
+                onClick={() => updateStyle('display', 'inline')} 
+                className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+              >
+              Inline
+              </button>
 
-    </OptionsPopover>
-  </div>
-</div>
+              </OptionsPopover>
+            </div>
+          </div>
+        </ModifiedCollapsable>
+      </div>
+
 
       {/* --- SPACING SECTION --- */}
-      <div className="mb-8">
+      <div className="w-full py-2 border-b border-gray-200 pl-4 pr-2 ">
+        <ModifiedCollapsable styleCategory="Spacing">
+          <SpacingEditor activeElement={activeElement} updateStyle={updateStyle}/>
+        </ModifiedCollapsable>
+      </div>
+
+      <div className="w-full py-2 border-b border-gray-200 pl-4 pr-2 ">
+        <ModifiedCollapsable styleCategory="Size">
+          <SizeSettings activeElement={activeElement} updateStyle={updateStyle}/>
+        </ModifiedCollapsable>
+      </div>
+      {/* <div className="mb-8">
         <h3 className="text-[10px] font-bold text-gray-400 uppercase mb-3">Spacing</h3>
         <div className="grid grid-cols-2 gap-2">
           <div>
@@ -132,10 +148,10 @@ const StylePanel = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* --- TYPOGRAPHY SECTION --- */}
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <h3 className="text-[10px] font-bold text-gray-400 uppercase mb-3">Typography</h3>
         <div className="space-y-3">
           <div>
@@ -152,10 +168,10 @@ const StylePanel = () => {
              <button onClick={() => updateStyle('textAlign', 'center')} className="flex-1 border text-[10px] py-1 hover:bg-gray-50 rounded">Center</button>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* --- DECORATION SECTION --- */}
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <h3 className="text-[10px] font-bold text-gray-400 uppercase mb-3">Background</h3>
         <div className="flex items-center gap-3">
           <input 
@@ -166,7 +182,7 @@ const StylePanel = () => {
           />
           <span className="text-[10px] text-gray-600 font-mono">{activeElement.styles?.backgroundColor || '#FFFFFF'}</span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
