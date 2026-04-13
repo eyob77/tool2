@@ -1,6 +1,11 @@
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Layout } from "lucide-react";
 import { useBuilder } from "../../context/builderContext";
-import {  ModifiedCollapsable, OptionsPopover, SizeSettings, SpacingEditor } from "../designer/utils";
+import {  LayoutSettings, ModifiedCollapsable, OptionsPopover, PositionSettings, SizeSettings, SpacingEditor } from "../designer/utils";
+
+const StyleValue ={
+  layout:{ name: 'Display', property: 'display', options: ['block', 'flex', 'grid', 'none',"inline", "inline-block", "inline-flex", "inline-grid"] },
+ //make all the style in side this object and then loop through it in the component to render the style sections, this will make it more scalable and easier to maintain in the future when we want to add more styles
+}
 
 const StylePanel = () => {
   const { selectedId, treeMirror, sendMessage } = useBuilder();
@@ -50,69 +55,44 @@ const StylePanel = () => {
       <div className="w-full py-2 border-b border-gray-200 pl-4 pr-2 ">
         <ModifiedCollapsable styleCategory="Layout">
           <div className="flex items-center gap-2p-1">
-          <span className="text-xs font-medium text-gray-700 flex-1">Display</span>
-          <div className="flex items-center flex-2 gap-1 px-1 py-0.5 border border-gray-200 rounded-md bg-white shadow-sm">
-            <button 
-              onClick={() => updateStyle('display', 'block')} 
-              className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-            >
-              Block
-            </button>
-            <button 
-              onClick={() => updateStyle('display', 'flex')} 
-              className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-            >
-              Flex
-            </button>
-            <button 
-              onClick={() => updateStyle('display', 'grid')} 
-              className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-            >
-              Grid
-            </button>
-            <button 
-              onClick={() => updateStyle('display', 'none')} 
-              className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-            >
-              None
-            </button>
-        
-            <div className="w-px h-4 bg-gray-200 mx-1" /> {/* Subtle Divider */}
+            <span className="text-xs font-medium text-gray-700 flex-1">{StyleValue.layout.name}</span>
+            <div className="flex items-center flex-2 gap-1 px-1 py-0.5 border border-gray-200 rounded-md bg-white shadow-sm">
+              
+              {StyleValue.layout.options.slice(0, 4).map(option => (
+                <button 
+                  key={option}
+                  onClick={() => updateStyle('display', option)} 
+                  className="text-[11px] px-0.5 py-1 font-medium capitalize text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+                >
+                  {option}
+                </button>
+              ))}
 
-              <OptionsPopover Icon={() => <ChevronDown className="size-3.5 text-gray-500"/>}>
-              <button 
-                onClick={() => updateStyle('display', 'inline-block')} 
-                className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-              >
-                Inline-Block
-              </button>
-              <button 
-                onClick={() => updateStyle('display', 'inline-flex')} 
-                className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-              >
-                Inline-Flex
-              </button>
-              <button 
-                onClick={() => updateStyle('display', 'inline-grid')} 
-                className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-              >
-                Inline-grid
-              </button>
-              <button 
-                onClick={() => updateStyle('display', 'inline')} 
-                className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
-              >
-              Inline
-              </button>
+              <div className="w-px h-4 bg-gray-200 mx-1" /> {/* Subtle Divider */}
 
-              </OptionsPopover>
-            </div>
+                <OptionsPopover Icon={() => <ChevronDown className="size-3.5 text-gray-500"/>}>
+                  {StyleValue.layout.options.slice(4,StyleValue.layout.options.length).map(option => (
+                      <button
+                      key={option}  
+                      onClick={() => updateStyle('display', option)} 
+                      className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </OptionsPopover>
+              </div>
           </div>
         </ModifiedCollapsable>
       </div>
 
 
       {/* --- SPACING SECTION --- */}
+      <div className="w-full py-2 border-b border-gray-200 pl-4 pr-2 ">
+        <ModifiedCollapsable styleCategory="Layout">
+          <LayoutSettings activeElement={activeElement} updateStyle={updateStyle}/>
+        </ModifiedCollapsable>
+      </div>
       <div className="w-full py-2 border-b border-gray-200 pl-4 pr-2 ">
         <ModifiedCollapsable styleCategory="Spacing">
           <SpacingEditor activeElement={activeElement} updateStyle={updateStyle}/>
@@ -122,6 +102,12 @@ const StylePanel = () => {
       <div className="w-full py-2 border-b border-gray-200 pl-4 pr-2 ">
         <ModifiedCollapsable styleCategory="Size">
           <SizeSettings activeElement={activeElement} updateStyle={updateStyle}/>
+        </ModifiedCollapsable>
+      </div>
+
+      <div className="w-full py-2 border-b border-gray-200 pl-4 pr-2 ">
+        <ModifiedCollapsable styleCategory="Position">
+          <PositionSettings activeElement={activeElement} updateStyle={updateStyle}/>
         </ModifiedCollapsable>
       </div>
       {/* <div className="mb-8">
