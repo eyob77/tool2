@@ -52,9 +52,9 @@ const StylePanel = () => {
     <div className="w-full h-full overflow-y-auto flex flex-col">
 
       {/* --- LAYER INFO --- */}
-      <div className="w-full py-2 border-b border-gray-200 pl-4 pr-2 ">
+      <div className="w-full py-2 border-b border-gray-200 pl-2 pr-2 ">
         <ModifiedCollapsable styleCategory="Layout">
-          <div className="flex items-center gap-2p-1">
+          <div className="flex items-center gap-2 p-1">
             <span className="text-xs font-medium text-gray-700 flex-1">{StyleValue.layout.name}</span>
             <div className="flex items-center flex-2 gap-1 px-1 py-0.5 border border-gray-200 rounded-md bg-white shadow-sm">
               
@@ -88,12 +88,12 @@ const StylePanel = () => {
 
 
       {/* --- SPACING SECTION --- */}
-      <div className="w-full py-2 border-b border-gray-200 pl-4 pr-2 ">
+      <div className="w-full py-2 border-b border-gray-200 pl-2 pr-2 ">
         <ModifiedCollapsable styleCategory="Layout">
           <LayoutSettings activeElement={activeElement} updateStyle={updateStyle}/>
         </ModifiedCollapsable>
       </div>
-      <div className="w-full py-2 border-b border-gray-200 pl-4 pr-2 ">
+      {/* <div className="w-full py-2 border-b border-gray-200 pl-4 pr-2 ">
         <ModifiedCollapsable styleCategory="Spacing">
           <SpacingEditor activeElement={activeElement} updateStyle={updateStyle}/>
         </ModifiedCollapsable>
@@ -109,7 +109,7 @@ const StylePanel = () => {
         <ModifiedCollapsable styleCategory="Position">
           <PositionSettings activeElement={activeElement} updateStyle={updateStyle}/>
         </ModifiedCollapsable>
-      </div>
+      </div> */}
       {/* <div className="mb-8">
         <h3 className="text-[10px] font-bold text-gray-400 uppercase mb-3">Spacing</h3>
         <div className="grid grid-cols-2 gap-2">

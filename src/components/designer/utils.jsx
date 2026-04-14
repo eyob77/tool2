@@ -13,14 +13,14 @@ export const ModifiedCollapsable = ({styleCategory,children}) => {
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
   return (
     <>
-      <button {...getToggleProps()} className="w-[98%] h-[3%] rounded-sm border-gray-200 py-1">
+      <button {...getToggleProps()} className="w-full h-[3%] rounded-sm border-gray-200 py-1">
         <span className="flex justify-between items-center text-sm font-bold">
           <span className="font-bold">{styleCategory}</span>
           {isExpanded ? <ChevronDown className="size-3"/>:<ChevronRight className="size-3"/>}
         </span>
       </button>
       <section {...getCollapseProps()} className="w-full! h-max flex justify-center px-0! mt-3">
-        <div className="w-[99%] h-full ">
+        <div className="w-full h-full ">
           {children}
         </div>
       </section>
@@ -221,18 +221,30 @@ export const SpacingEditor = ({ activeElement, updateStyle }) => {
 };
 
 
-export const SegmentButton = ({ prop, value, label, current }) => (
-  <button
-    onClick={() => updateStyle(prop, value)}
-    className={`flex-1 py-1 text-[9px] rounded transition-all capitalize ${
-      current === value 
-        ? 'bg-white text-blue-600 shadow-sm ring-1 ring-black/5' 
-        : 'text-gray-400 hover:text-gray-600'
-    }`}
-  >
-    {label}
-  </button>
-);
+export const SegmentButton = ({options,property,updateStyle}) => {
+  const [selected, setSelected] = useState(null);
+
+  return (
+    <>
+      {options.map(option => (
+        <button 
+          key={option}
+          onClick={() => {
+            setSelected(option);
+            updateStyle(property, option);
+          }}
+          className={`text-[11px] px-0.5 py-1 font-medium capitalize rounded transition-colors
+            ${selected === option 
+              ? "bg-gray-200 text-gray-500 border border-gray-300 shadow-md border-0.5"   // active style
+              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+            }`}
+        >
+          {option}
+        </button>
+      ))}
+    </>
+  )
+}
 export const SizeSettings = ({ activeElement, updateStyle }) => {
   const s = activeElement?.styles || {};
 
@@ -498,149 +510,139 @@ export const PositionSettings = ({ activeElement, updateStyle }) => {
 };
 
 
-const FlexMiniMap = ({ s, updateStyle }) => {
-  // Mapping the 3x3 grid dots to CSS
-  const zones = [
-    { jc: 'flex-start', ai: 'flex-start' }, { jc: 'center', ai: 'flex-start' }, { jc: 'flex-end', ai: 'flex-start' },
-    { jc: 'flex-start', ai: 'center' },     { jc: 'center', ai: 'center' },     { jc: 'flex-end', ai: 'center' },
-    { jc: 'flex-start', ai: 'flex-end' },   { jc: 'center', ai: 'flex-end' },   { jc: 'flex-end', ai: 'flex-end' },
-  ];
 
-  return (
-    <div className="flex flex-col items-center gap-2">
+
+// --- 1. THE FLEX WIZARD COMPONENT ---
+const FlexSettings = ({ s, updateStyle }) => (
+  <div className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300 p-1 mt-0.5">
+    {/* Direction Toggle */}
+    <div className="w-full flex items-center gap-2 ">
+      <span className="text-xs font-medium text-gray-700 w">Direction</span>
+      <div className="flex items-center justify-around flex-2 gap-1 py-0.5 border border-gray-200 rounded-md bg-white shadow-sm">
+        {/* add row-reverse and column-reverse */}
+        <SegmentButton options={['row', 'column']} property="flexDirection" updateStyle={updateStyle} />
+      </div>
+    </div>
+
+    {/* The Mini-Map Dots */}
+    <div className="flex flex-col items-center gap-2 py-2">
       <div className="grid grid-cols-3 gap-4 bg-gray-900/5 p-4 rounded-xl border border-gray-200 w-32 h-32 shadow-inner relative">
-        {zones.map((z, i) => {
+        {[
+          { jc: 'flex-start', ai: 'flex-start' }, { jc: 'center', ai: 'flex-start' }, { jc: 'flex-end', ai: 'flex-start' },
+          { jc: 'flex-start', ai: 'center' },     { jc: 'center', ai: 'center' },     { jc: 'flex-end', ai: 'center' },
+          { jc: 'flex-start', ai: 'flex-end' },   { jc: 'center', ai: 'flex-end' },   { jc: 'flex-end', ai: 'flex-end' },
+        ].map((z, i) => {
           const isActive = s.justifyContent === z.jc && s.alignItems === z.ai;
           return (
-            <button
-              key={i}
-              onClick={() => {
-                updateStyle('justifyContent', z.jc);
-                updateStyle('alignItems', z.ai);
-              }}
-              className="relative flex items-center justify-center"
-            >
-              {/* The Active Ring (Visible only when selected) */}
-              {isActive && (
-                <div className="absolute w-5 h-5 border border-blue-500 rounded-full animate-pulse" />
-              )}
-              {/* The Dot */}
-              <div className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                isActive ? 'bg-blue-600 scale-125' : 'bg-gray-300 hover:bg-gray-400'
-              }`} />
+            <button key={i} onClick={() => { updateStyle('justifyContent', z.jc); updateStyle('alignItems', z.ai); }} className="relative flex items-center justify-center">
+              {isActive && <div className="absolute w-5 h-5 border border-blue-500 rounded-full animate-pulse" />}
+              <div className={`w-1.5 h-1.5 rounded-full transition-all ${isActive ? 'bg-blue-600 scale-125' : 'bg-gray-300 hover:bg-gray-400'}`} />
             </button>
           );
         })}
       </div>
-      <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Quick Align</span>
+      <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Alignment Map</span>
     </div>
-  );
-};
 
+    {/* Distribution Overrides */}
+    <div className="grid grid-cols-2 gap-2">
+       <button onClick={() => updateStyle('justifyContent', 'space-between')} className={`py-1.5 text-[9px] font-bold rounded border ${s.justifyContent === 'space-between' ? 'bg-blue-50 border-blue-400 text-blue-700' : 'bg-white text-gray-500'}`}>Space Between</button>
+       <button onClick={() => updateStyle('alignItems', 'stretch')} className={`py-1.5 text-[9px] font-bold rounded border ${s.alignItems === 'stretch' ? 'bg-blue-50 border-blue-400 text-blue-700' : 'bg-white text-gray-500'}`}>Stretch Fill</button>
+    </div>
+  </div>
+);
+
+// --- 2. THE GRID WIZARD COMPONENT ---
+const GridSettings = ({ s, updateStyle }) => (
+  <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+    <div>
+      <label className="text-[10px] text-gray-400 font-bold uppercase mb-2 block">Grid Configuration</label>
+      <div className="space-y-3">
+        <div>
+          <span className="text-[9px] text-gray-500 mb-1 block">Columns (e.g., 1fr 1fr 1fr)</span>
+          <input 
+            type="text" className="w-full bg-white border border-gray-300 rounded px-2 py-1.5 text-[11px] font-mono"
+            placeholder="1fr 1fr" value={s.gridTemplateColumns || ''} onChange={(e) => updateStyle('gridTemplateColumns', e.target.value)}
+          />
+        </div>
+        <div>
+          <span className="text-[9px] text-gray-500 mb-1 block">Rows</span>
+          <input 
+            type="text" className="w-full bg-white border border-gray-300 rounded px-2 py-1.5 text-[11px] font-mono"
+            placeholder="auto" value={s.gridTemplateRows || ''} onChange={(e) => updateStyle('gridTemplateRows', e.target.value)}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// --- 3. THE MAIN COMPONENT ---
 export const LayoutSettings = ({ activeElement, updateStyle }) => {
   const s = activeElement?.styles || {};
-  
   const labelClass = "text-[10px] text-gray-500 font-bold uppercase mb-2 block";
-  const selectClass = "w-full bg-white border border-gray-300 rounded-md px-2 py-1.5 text-[11px] outline-none focus:border-blue-500 appearance-none cursor-pointer shadow-sm transition-all hover:border-gray-400";
-  const inputClass = "w-full bg-white border border-gray-300 rounded-md px-2 py-1.5 text-[11px] outline-none focus:border-blue-500 appearance-none cursor-pointer shadow-sm transition-all hover:border-gray-400";
 
   return (
-    <div className="p-4 bg-gray-50 border-t border-gray-200 select-none">
-      <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-4">Layout</h3>
+    <div className="py-1">
 
-      {/* 1. Display Selector */}
-      <div className="mb-6">
-        <label className={labelClass}>Display</label>
-        <select 
-          className={selectClass}
-          value={s.display || 'block'}
-          onChange={(e) => updateStyle('display', e.target.value)}
-        >
-          <option value="block">Stacked (Block)</option>
-          <option value="flex">Flexible (Flex)</option>
-          <option value="grid">Grid</option>
-          <option value="inline-block">Inline Block</option>
-          <option value="none">Hidden (None)</option>
-        </select>
+      {/* Primary Switcher */}
+      <div className="flex items-center gap-2 p-1">
+            <span className="text-xs font-medium text-gray-700 flex-1">Display</span>
+            <div className="flex items-center flex-2 gap-1 px-1 py-0.5 border border-gray-200 rounded-md bg-white shadow-sm">
+              
+              
+              <SegmentButton options={['block', 'flex', 'grid', 'none']} property="display" updateStyle={updateStyle} />
+
+              <div className="w-px h-4 bg-gray-200 mx-1" /> {/* Subtle Divider */}
+
+                <OptionsPopover Icon={() => <ChevronDown className="size-3.5 text-gray-500"/>}>
+                  {['inline', 'inline-block', 'inline-flex', 'inline-grid'].map(option => (
+                  <button
+                    key={option}  
+                    onClick={() => updateStyle('display', option)} 
+                    className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+                  >
+                    {option}
+                </button>
+              ))}
+            </OptionsPopover>
+          </div>
       </div>
 
-      {s.display === 'flex' && (
-        <div className="space-y-6 animate-in fade-in duration-300">
-          
-          {/* 2. Direction Toggle */}
-          <div>
-            <label className={labelClass}>Direction</label>
-            <div className="flex bg-gray-200 p-1 rounded-lg gap-1 border border-gray-300 shadow-inner">
-              <button 
-                onClick={() => updateStyle('flexDirection', 'row')} 
-                className={`flex-1 py-1.5 text-[10px] font-bold rounded-md transition-all ${s.flexDirection !== 'column' ? 'bg-white shadow text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
-              >
-                Horizontal
-              </button>
-              <button 
-                onClick={() => updateStyle('flexDirection', 'column')} 
-                className={`flex-1 py-1.5 text-[10px] font-bold rounded-md transition-all ${s.flexDirection === 'column' ? 'bg-white shadow text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
-              >
-                Vertical
-              </button>
-            </div>
+      {/* DYNAMIC SUB-PANELS */}
+        {s.display === 'flex' && <FlexSettings s={s} updateStyle={updateStyle} />}
+        {s.display === 'grid' && <GridSettings s={s} updateStyle={updateStyle} />}
+        {s.display === 'none' && ""}
+        {s.display === 'block' && ""}
+        
+        {/* {(s.display === 'block' || s.display === 'none') && (
+          <div className="flex flex-col items-center justify-center h-24 border-2 border-dashed border-gray-200 rounded-xl text-gray-400">
+            <span className="text-[10px] font-medium italic">Standard Stacked Layout</span>
           </div>
+        )} */}
 
-          {/* 3. The Mini-Map (Wizard) */}
-          <FlexMiniMap s={s} updateStyle={updateStyle} />
-
-          {/* 4. Manual Overrides (For Coders/Advanced Users) */}
-          <div className="pt-4 border-t border-gray-200 space-y-3">
-            <details className="group">
-              <summary className="text-[10px] text-blue-500 font-bold uppercase cursor-pointer list-none flex items-center gap-1 hover:text-blue-600">
-                <span className="group-open:rotate-90 transition-transform">▶</span>
-                Manual Alignment
-              </summary>
-              <div className="mt-3 space-y-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm animate-in slide-in-from-top-1">
-                <div>
-                  <label className="text-[9px] text-gray-400 font-bold uppercase block mb-1">Justify Content</label>
-                  <select className={selectClass} value={s.justifyContent || 'flex-start'} onChange={(e) => updateStyle('justifyContent', e.target.value)}>
-                    <option value="flex-start">Start</option>
-                    <option value="center">Center</option>
-                    <option value="flex-end">End</option>
-                    <option value="space-between">Space Between</option>
-                    <option value="space-around">Space Around</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-[9px] text-gray-400 font-bold uppercase block mb-1">Align Items</label>
-                  <select className={selectClass} value={s.alignItems || 'flex-start'} onChange={(e) => updateStyle('alignItems', e.target.value)}>
-                    <option value="flex-start">Top / Start</option>
-                    <option value="center">Center</option>
-                    <option value="flex-end">Bottom / End</option>
-                    <option value="stretch">Stretch (Fill)</option>
-                    <option value="baseline">Baseline</option>
-                  </select>
-                </div>
-              </div>
-            </details>
+      {/* COMMON SETTINGS (Visible for Flex and Grid) */}
+      {(s.display === 'flex' || s.display === 'grid') && (
+        <div className="mt-6 pt-4 border-t border-gray-200">
+          <label className={labelClass}>Gap (Spacing Between Items)</label>
+          <div className="grid grid-cols-2 gap-3">
+             <div className="relative">
+                <input 
+                  type="text" className="w-full bg-white border border-gray-300 rounded-md pl-2 pr-2 py-1.5 text-[11px] outline-none" 
+                  value={s.columnGap || ''} onChange={(e) => updateStyle('columnGap', e.target.value)} placeholder="Horizontal" 
+                />
+             </div>
+             <div className="relative">
+                <input 
+                  type="text" className="w-full bg-white border border-gray-300 rounded-md pl-2 pr-2 py-1.5 text-[11px] outline-none" 
+                  value={s.rowGap || ''} onChange={(e) => updateStyle('rowGap', e.target.value)} placeholder="Vertical" 
+                />
+             </div>
           </div>
-
-          {/* 5. Gaps */}
-          <div className="pt-4 border-t border-gray-200">
-            <label className={labelClass}>Spacing Between (Gap)</label>
-            <div className="grid grid-cols-2 gap-3">
-               <input 
-                type="text" className={inputClass} 
-                value={s.columnGap || ''} onChange={(e) => updateStyle('columnGap', e.target.value)} 
-                placeholder="Column Gap (px)" 
-               />
-               <input 
-                type="text" className={inputClass} 
-                value={s.rowGap || ''} onChange={(e) => updateStyle('rowGap', e.target.value)} 
-                placeholder="Row Gap (px)" 
-               />
-            </div>
-          </div>
-
         </div>
       )}
     </div>
   );
 };
+
 // In your Canvas.jsx DROP handler:
