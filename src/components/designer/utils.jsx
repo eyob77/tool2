@@ -1,6 +1,5 @@
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useCollapse } from "react-collapsed";
-import { Container, QuickStack, Section } from "../svgs";
 
 
 export const HorizontalDivider = ()=>{
@@ -178,16 +177,16 @@ export const SpacingEditor = ({ activeElement, updateStyle }) => {
         
         {/* Margin Positions */}
         <div className="absolute top-1 left-1/2 -translate-x-1/2">
-          <SpacingInput value={s.marginTop} onUpdate={(v) => updateStyle('marginTop', v)} isPadding={false} />
+          <SpacingInput value={s.marginTop} onUpdate={(v) => updateStyle({'marginTop': v})} isPadding={false} />
         </div>
         <div className="absolute right-0.5 top-1/2 -translate-y-1/2">
-          <SpacingInput value={s.marginRight} onUpdate={(v) => updateStyle('marginRight', v)} isPadding={false} />
+          <SpacingInput value={s.marginRight} onUpdate={(v) => updateStyle({'marginRight': v})} isPadding={false} />
         </div>
         <div className="absolute bottom-1 left-1/2 -translate-x-1/2">
-          <SpacingInput value={s.marginBottom} onUpdate={(v) => updateStyle('marginBottom', v)} isPadding={false} />
+          <SpacingInput value={s.marginBottom} onUpdate={(v) => updateStyle({'marginBottom': v})} isPadding={false} />
         </div>
         <div className="absolute left-0.5 top-1/2 -translate-y-1/2">
-          <SpacingInput value={s.marginLeft} onUpdate={(v) => updateStyle('marginLeft', v)} isPadding={false} />
+          <SpacingInput value={s.marginLeft} onUpdate={(v) => updateStyle({'marginLeft': v})} isPadding={false} />
         </div>
 
         {/* 🔵 PADDING BOX (Inner - Webflow Blue scheme) */}
@@ -200,16 +199,16 @@ export const SpacingEditor = ({ activeElement, updateStyle }) => {
           
           {/* Padding Positions */}
           <div className="absolute top-1 left-1/2 -translate-x-1/2">
-            <SpacingInput value={s.paddingTop} onUpdate={(v) => updateStyle('paddingTop', v)} isPadding={true} />
+            <SpacingInput value={s.paddingTop} onUpdate={(v) => updateStyle({'paddingTop': v})} isPadding={true} />
           </div>
           <div className="absolute right-1 top-1/2 -translate-y-1/2">
-            <SpacingInput value={s.paddingRight} onUpdate={(v) => updateStyle('paddingRight', v)} isPadding={true} />
+            <SpacingInput value={s.paddingRight} onUpdate={(v) => updateStyle({'paddingRight': v})} isPadding={true} />
           </div>
           <div className="absolute bottom-1 left-1/2 -translate-x-1/2">
-            <SpacingInput value={s.paddingBottom} onUpdate={(v) => updateStyle('paddingBottom', v)} isPadding={true} />
+            <SpacingInput value={s.paddingBottom} onUpdate={(v) => updateStyle({'paddingBottom': v})} isPadding={true} />
           </div>
           <div className="absolute left-1 top-1/2 -translate-y-1/2">
-            <SpacingInput value={s.paddingLeft} onUpdate={(v) => updateStyle('paddingLeft', v)} isPadding={true} />
+            <SpacingInput value={s.paddingLeft} onUpdate={(v) => updateStyle({'paddingLeft': v})} isPadding={true} />
           </div>
 
           {/* Center "Content" Placeholder */}
@@ -231,7 +230,7 @@ export const SegmentButton = ({options,property,updateStyle}) => {
           key={option}
           onClick={() => {
             setSelected(option);
-            updateStyle(property, option);
+            updateStyle({[property]: option});
           }}
           className={`text-[11px] px-0.5 py-1 font-medium capitalize rounded transition-colors
             ${selected === option 
@@ -262,42 +261,42 @@ export const SizeSettings = ({ activeElement, updateStyle }) => {
           <label className={labelClass}>Width</label>
           <input 
             type="text" placeholder="auto" className={inputClass}
-            value={s.width || ''} onChange={(e) => updateStyle('width', e.target.value)}
+            value={s.width || ''} onChange={(e) => updateStyle({'width': e.target.value})}
           />
         </div>
         <div>
           <label className={labelClass}>Height</label>
           <input 
             type="text" placeholder="auto" className={inputClass}
-            value={s.height || ''} onChange={(e) => updateStyle('height', e.target.value)}
+            value={s.height || ''} onChange={(e) => updateStyle({'height': e.target.value})}
           />
         </div>
         <div>
           <label className={labelClass}>Min W</label>
           <input 
             type="text" placeholder="0px" className={inputClass}
-            value={s.minWidth || ''} onChange={(e) => updateStyle('minWidth', e.target.value)}
+            value={s.minWidth || ''} onChange={(e) => updateStyle({'minWidth': e.target.value})}
           />
         </div>
         <div>
           <label className={labelClass}>Min H</label>
           <input 
             type="text" placeholder="0px" className={inputClass}
-            value={s.minHeight || ''} onChange={(e) => updateStyle('minHeight', e.target.value)}
+            value={s.minHeight || ''} onChange={(e) => updateStyle({'minHeight': e.target.value})}
           />
         </div>
         <div>
           <label className={labelClass}>Max W</label>
           <input 
             type="text" placeholder="none" className={inputClass}
-            value={s.maxWidth || ''} onChange={(e) => updateStyle('maxWidth', e.target.value)}
+            value={s.maxWidth || ''} onChange={(e) => updateStyle({'maxWidth': e.target.value})}
           />
         </div>
         <div>
           <label className={labelClass}>Max H</label>
           <input 
             type="text" placeholder="none" className={inputClass}
-            value={s.maxHeight || ''} onChange={(e) => updateStyle('maxHeight', e.target.value)}
+            value={s.maxHeight || ''} onChange={(e) => updateStyle({'maxHeight': e.target.value})}
           />
         </div>
       </div>
@@ -309,7 +308,7 @@ export const SizeSettings = ({ activeElement, updateStyle }) => {
             <label className={labelClass}>Aspect Ratio</label>
             <input 
               type="text" placeholder="auto (e.g. 16/9)" className={inputClass}
-              value={s.aspectRatio || ''} onChange={(e) => updateStyle('aspectRatio', e.target.value)}
+              value={s.aspectRatio || ''} onChange={(e) => updateStyle({'aspectRatio': e.target.value})}
             />
           </div>
 
@@ -347,7 +346,7 @@ export const SizeSettings = ({ activeElement, updateStyle }) => {
             <select 
               className={selectClass} 
               value={s.boxSizing || 'border-box'} 
-              onChange={(e) => updateStyle('boxSizing', e.target.value)}
+              onChange={(e) => updateStyle({'boxSizing': e.target.value})}
             >
               <option value="border-box">Border Box</option>
               <option value="content-box">Content Box</option>
@@ -361,7 +360,7 @@ export const SizeSettings = ({ activeElement, updateStyle }) => {
               {['fill', 'contain', 'cover', 'none'].map((fit) => (
                 <button
                   key={fit}
-                  onClick={() => updateStyle('objectFit', fit)}
+                  onClick={() => updateStyle({'objectFit': fit})}
                   className={`flex-1 text-[10px] py-1 rounded transition-all capitalize font-bold ${
                     s.objectFit === fit ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500 hover:text-gray-700'
                   }`}
@@ -429,7 +428,7 @@ export const PositionSettings = ({ activeElement, updateStyle }) => {
           {positions.map((pos) => (
             <button
               key={pos}
-              onClick={() => updateStyle('position', pos)}
+              onClick={() => updateStyle({'position': pos})}
               className={`text-[9px] py-1 rounded font-bold uppercase transition-all ${
                 (s.position || 'static') === pos 
                   ? 'bg-white text-blue-600 shadow-sm' 
@@ -451,7 +450,7 @@ export const PositionSettings = ({ activeElement, updateStyle }) => {
             <label className={labelClass}>Z-Index</label>
             <input 
               type="number" placeholder="auto" className={inputClass}
-              value={s.zIndex || ''} onChange={(e) => updateStyle('zIndex', e.target.value)}
+              value={s.zIndex || ''} onChange={(e) => updateStyle({'zIndex': e.target.value})}
             />
           </div>
 
@@ -463,7 +462,7 @@ export const PositionSettings = ({ activeElement, updateStyle }) => {
              <div className="absolute top-1 left-1/2 -translate-x-1/2 w-12">
                <input 
                  type="text" placeholder="0" className={`${inputClass} text-center py-0.5`}
-                 value={s.top || ''} onChange={(e) => updateStyle('top', e.target.value)}
+                 value={s.top || ''} onChange={(e) => updateStyle({'top': e.target.value})}
                />
              </div>
 
@@ -471,7 +470,7 @@ export const PositionSettings = ({ activeElement, updateStyle }) => {
              <div className="absolute right-1 top-1/2 -translate-y-1/2 w-12">
                <input 
                  type="text" placeholder="0" className={`${inputClass} text-center py-0.5`}
-                 value={s.right || ''} onChange={(e) => updateStyle('right', e.target.value)}
+                 value={s.right || ''} onChange={(e) => updateStyle({'right': e.target.value})}
                />
              </div>
 
@@ -479,7 +478,7 @@ export const PositionSettings = ({ activeElement, updateStyle }) => {
              <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-12">
                <input 
                  type="text" placeholder="0" className={`${inputClass} text-center py-0.5`}
-                 value={s.bottom || ''} onChange={(e) => updateStyle('bottom', e.target.value)}
+                 value={s.bottom || ''} onChange={(e) => updateStyle({'bottom': e.target.value})}
                />
              </div>
 
@@ -487,7 +486,7 @@ export const PositionSettings = ({ activeElement, updateStyle }) => {
              <div className="absolute left-1 top-1/2 -translate-y-1/2 w-12">
                <input 
                  type="text" placeholder="0" className={`${inputClass} text-center py-0.5`}
-                 value={s.left || ''} onChange={(e) => updateStyle('left', e.target.value)}
+                 value={s.left || ''} onChange={(e) => updateStyle({'left': e.target.value})}
                />
              </div>
 
@@ -525,30 +524,66 @@ const FlexSettings = ({ s, updateStyle }) => (
     </div>
 
     {/* The Mini-Map Dots */}
-    <div className="flex flex-col items-center gap-2 py-2">
-      <div className="grid grid-cols-3 gap-4 bg-gray-900/5 p-4 rounded-xl border border-gray-200 w-32 h-32 shadow-inner relative">
-        {[
-          { jc: 'flex-start', ai: 'flex-start' }, { jc: 'center', ai: 'flex-start' }, { jc: 'flex-end', ai: 'flex-start' },
-          { jc: 'flex-start', ai: 'center' },     { jc: 'center', ai: 'center' },     { jc: 'flex-end', ai: 'center' },
-          { jc: 'flex-start', ai: 'flex-end' },   { jc: 'center', ai: 'flex-end' },   { jc: 'flex-end', ai: 'flex-end' },
-        ].map((z, i) => {
-          const isActive = s.justifyContent === z.jc && s.alignItems === z.ai;
-          return (
-            <button key={i} onClick={() => { updateStyle('justifyContent', z.jc); updateStyle('alignItems', z.ai); }} className="relative flex items-center justify-center">
-              {isActive && <div className="absolute w-5 h-5 border border-blue-500 rounded-full animate-pulse" />}
-              <div className={`w-1.5 h-1.5 rounded-full transition-all ${isActive ? 'bg-blue-600 scale-125' : 'bg-gray-300 hover:bg-gray-400'}`} />
-            </button>
-          );
-        })}
-      </div>
-      <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Alignment Map</span>
-    </div>
+    <div className="flex flex-row items-center justify-end gap-2 py-1">
+      
+      <div className="grid grid-cols-3 from-gray-50 to-gray-100/50 rounded border border-gray-200/80  w-21 h-21 relative backdrop-blur-sm">
+  {[
+    { jc: 'flex-start', ai: 'flex-start' },
+    { jc: 'center', ai: 'flex-start' },
+    { jc: 'flex-end', ai: 'flex-start' },
 
-    {/* Distribution Overrides */}
-    <div className="grid grid-cols-2 gap-2">
-       <button onClick={() => updateStyle('justifyContent', 'space-between')} className={`py-1.5 text-[9px] font-bold rounded border ${s.justifyContent === 'space-between' ? 'bg-blue-50 border-blue-400 text-blue-700' : 'bg-white text-gray-500'}`}>Space Between</button>
-       <button onClick={() => updateStyle('alignItems', 'stretch')} className={`py-1.5 text-[9px] font-bold rounded border ${s.alignItems === 'stretch' ? 'bg-blue-50 border-blue-400 text-blue-700' : 'bg-white text-gray-500'}`}>Stretch Fill</button>
-    </div>
+    { jc: 'flex-start', ai: 'center' },
+    { jc: 'center', ai: 'center' },
+    { jc: 'flex-end', ai: 'center' },
+
+    { jc: 'flex-start', ai: 'flex-end' },
+    { jc: 'center', ai: 'flex-end' },
+    { jc: 'flex-end', ai: 'flex-end' },
+  ].map((z, i) => {
+    const isActive =
+      s.justifyContent === z.jc && s.alignItems === z.ai;
+
+    return (
+      <button
+        key={i}
+        onClick={() => {
+          updateStyle({'justifyContent': z.jc,'alignItems': z.ai});
+          console.log(z.jc,z.ai)
+        }}
+        className="relative flex items-center justify-center group"
+      >
+        
+
+        {/* Hover ring effect */}
+        <div className="absolute w-7 h-7 transition-all duration-300 ease-out opacity-0 group-hover:opacity-100 group-hover:border group-hover:border-blue-300/50 group-hover:scale-110" />
+
+        {/* Mini flex preview with smooth transitions */}
+        <div
+          className={`w-7 h-7 rounded border flex overflow-hidden border-gray-200/70 bg-white/90 hover:bg-white hover:border-gray-400 hover:scale-105 hover:shadow-sm transition-all duration-300 ease-out `}
+          style={{
+            display: 'flex',
+            justifyContent: z.jc,
+            alignItems: z.ai,
+            transition: 'justify-content 0.3s ease-out, align-items 0.3s ease-out',
+          }}
+        >
+          {/* Flex items - only visible when active */}
+          <div className={`w-1.5 h-3 rounded-xs m-px transition-all duration-300 align-bottom ${
+            isActive ? 'bg-blue-600 scale-110 opacity-100' : 'bg-transparent opacity-0'
+          }`} />
+          <div className={`w-1.5 h-1.5 rounded-xs m-px transition-all duration-300 ${
+            isActive ? 'bg-blue-500 scale-110 opacity-100' : 'bg-transparent opacity-0'
+          }`} />
+        </div>
+      </button>
+    );
+  })}
+      </div>
+      <div className="flex flex-col gap-2">
+       <button onClick={() => updateStyle({'justifyContent': 'space-between'})} className={`py-1.5 text-[9px] font-bold rounded border ${s.justifyContent === 'space-between' ? 'bg-blue-50 border-blue-400 text-blue-700' : 'bg-white text-gray-500'}`}>Space Between</button>
+       <button onClick={() => updateStyle({'alignItems': 'stretch'})} className={`py-1.5 text-[9px] font-bold rounded border ${s.alignItems === 'stretch' ? 'bg-blue-50 border-blue-400 text-blue-700' : 'bg-white text-gray-500'}`}>Stretch Fill</button>
+      </div>
+    </div>    
   </div>
 );
 
@@ -562,14 +597,14 @@ const GridSettings = ({ s, updateStyle }) => (
           <span className="text-[9px] text-gray-500 mb-1 block">Columns (e.g., 1fr 1fr 1fr)</span>
           <input 
             type="text" className="w-full bg-white border border-gray-300 rounded px-2 py-1.5 text-[11px] font-mono"
-            placeholder="1fr 1fr" value={s.gridTemplateColumns || ''} onChange={(e) => updateStyle('gridTemplateColumns', e.target.value)}
+            placeholder="1fr 1fr" value={s.gridTemplateColumns || ''} onChange={(e) => updateStyle({'gridTemplateColumns': e.target.value})}
           />
         </div>
         <div>
           <span className="text-[9px] text-gray-500 mb-1 block">Rows</span>
           <input 
             type="text" className="w-full bg-white border border-gray-300 rounded px-2 py-1.5 text-[11px] font-mono"
-            placeholder="auto" value={s.gridTemplateRows || ''} onChange={(e) => updateStyle('gridTemplateRows', e.target.value)}
+            placeholder="auto" value={s.gridTemplateRows || ''} onChange={(e) => updateStyle({'gridTemplateRows': e.target.value})}
           />
         </div>
       </div>
@@ -599,7 +634,7 @@ export const LayoutSettings = ({ activeElement, updateStyle }) => {
                   {['inline', 'inline-block', 'inline-flex', 'inline-grid'].map(option => (
                   <button
                     key={option}  
-                    onClick={() => updateStyle('display', option)} 
+                    onClick={() => updateStyle({'display': option})} 
                     className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
                   >
                     {option}
@@ -629,13 +664,13 @@ export const LayoutSettings = ({ activeElement, updateStyle }) => {
              <div className="relative">
                 <input 
                   type="text" className="w-full bg-white border border-gray-300 rounded-md pl-2 pr-2 py-1.5 text-[11px] outline-none" 
-                  value={s.columnGap || ''} onChange={(e) => updateStyle('columnGap', e.target.value)} placeholder="Horizontal" 
+                  value={s.columnGap || ''} onChange={(e) => updateStyle({'columnGap': e.target.value})} placeholder="Horizontal" 
                 />
              </div>
              <div className="relative">
                 <input 
                   type="text" className="w-full bg-white border border-gray-300 rounded-md pl-2 pr-2 py-1.5 text-[11px] outline-none" 
-                  value={s.rowGap || ''} onChange={(e) => updateStyle('rowGap', e.target.value)} placeholder="Vertical" 
+                  value={s.rowGap || ''} onChange={(e) => updateStyle({'rowGap': e.target.value})} placeholder="Vertical" 
                 />
              </div>
           </div>

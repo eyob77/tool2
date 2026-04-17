@@ -36,15 +36,18 @@ const StylePanel = () => {
     );
   }
 
-  const updateStyle = (property, value) => {
-    sendMessage({
-      type: 'UPDATE_ELEMENT',
-      payload: { 
-        id: selectedId, 
-        styles: { ...activeElement.styles, [property]: value } 
-      }
-    });
-  };
+ const updateStyle = (styles) => {
+  sendMessage({
+    type: 'UPDATE_ELEMENT',
+    payload: { 
+      id: selectedId, 
+      styles: { 
+        ...activeElement.styles,
+        ...styles
+      } 
+    }
+  });
+};
 
   if (!activeElement) return <div className="p-4 text-gray-400 text-sm">Select an element</div>;
 
@@ -61,7 +64,7 @@ const StylePanel = () => {
               {StyleValue.layout.options.slice(0, 4).map(option => (
                 <button 
                   key={option}
-                  onClick={() => updateStyle('display', option)} 
+                  onClick={() => updateStyle({'display': option})} 
                   className="text-[11px] px-0.5 py-1 font-medium capitalize text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
                 >
                   {option}
@@ -74,7 +77,7 @@ const StylePanel = () => {
                   {StyleValue.layout.options.slice(4,StyleValue.layout.options.length).map(option => (
                       <button
                       key={option}  
-                      onClick={() => updateStyle('display', option)} 
+                      onClick={() => updateStyle({'display': option})} 
                       className="text-[11px] px-0.5 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
                     >
                       {option}
