@@ -83,7 +83,7 @@ export const removeNode = (nodes, id) => {
 
 import React, { useState, useRef, useEffect } from 'react';
 
-export const OptionsPopover = ({ children,Icon,text }) => {
+export const OptionsPopover = ({ children }) => {
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef(null);
 
@@ -103,10 +103,9 @@ export const OptionsPopover = ({ children,Icon,text }) => {
       {/* The "More Options" Trigger */}
       <button
         onClick={() => setIsVisible(!isVisible)}
-        className=" hover:bg-gray-100 border-gray-200 transition-colors"
+        className=" hover:bg-gray-100 border-gray-200 transition-colors text-center"
       >
-        {Icon && <Icon />}
-        {text && <span className="text-sm font-medium">{text}</span>}
+       <ChevronDown className="size-3.5 text-gray-500"/>
       </button>
 
       {/* The Mini-Modal (Hidden & Uninteractive when isVisible is false) */}
@@ -232,9 +231,9 @@ export const SegmentButton = ({options,property,updateStyle}) => {
             setSelected(option);
             updateStyle({[property]: option});
           }}
-          className={`text-[11px] px-0.5 py-1 font-medium capitalize rounded transition-colors
+          className={`text-[11px] flex-1 px-0.5 py-1 font-medium capitalize rounded transition-colors
             ${selected === option 
-              ? "bg-gray-200 text-gray-500 border border-gray-300 shadow-md border-0.5"   // active style
+              ? "bg-gray-200 text-gray-500  shadow-sm boredr-0.5"   // active style
               : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
             }`}
         >
@@ -517,7 +516,7 @@ const FlexSettings = ({ s, updateStyle }) => (
     {/* Direction Toggle */}
     <div className="w-full flex items-center gap-2 ">
       <span className="text-xs font-medium text-gray-700 w">Direction</span>
-      <div className="flex items-center justify-around flex-2 gap-1 py-0.5 border border-gray-200 rounded-md bg-white shadow-sm">
+      <div className="flex items-center justify-around flex-2 gap-1 py-1 px-1 border border-gray-200 rounded-md bg-white shadow-sm">
         {/* add row-reverse and column-reverse */}
         <SegmentButton options={['row', 'column']} property="flexDirection" updateStyle={updateStyle} />
       </div>
@@ -623,14 +622,14 @@ export const LayoutSettings = ({ activeElement, updateStyle }) => {
       {/* Primary Switcher */}
       <div className="flex items-center gap-2 p-1">
             <span className="text-xs font-medium text-gray-700 flex-1">Display</span>
-            <div className="flex items-center flex-2 gap-1 px-1 py-0.5 border border-gray-200 rounded-md bg-white shadow-sm">
+            <div className="flex items-center flex-2 gap-1 px-0.5 py-1 border border-gray-200 rounded-md bg-white shadow-sm">
               
               
               <SegmentButton options={['block', 'flex', 'grid', 'none']} property="display" updateStyle={updateStyle} />
 
               <div className="w-px h-4 bg-gray-200 mx-1" /> {/* Subtle Divider */}
 
-                <OptionsPopover Icon={() => <ChevronDown className="size-3.5 text-gray-500"/>}>
+                <OptionsPopover>
                   {['inline', 'inline-block', 'inline-flex', 'inline-grid'].map(option => (
                   <button
                     key={option}  
