@@ -548,7 +548,6 @@ const FlexSettings = ({ s, updateStyle }) => (
                 key={i}
                 onClick={() => {
                   updateStyle({'justifyContent': z.jc,'alignItems': z.ai});
-                  console.log(z.jc,z.ai)
                 }}
                 className="relative flex items-center justify-center group"
               >
@@ -623,18 +622,16 @@ const FlexSettings = ({ s, updateStyle }) => (
 // --- 2. THE GRID WIZARD COMPONENT ---
 const GridSettings = ({ s, updateStyle }) => (
   <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-    <div>
-      <label className="text-[10px] text-gray-400 font-bold uppercase mb-2 block">Grid Configuration</label>
-      <div className="space-y-3">
+    <div className="px-1">
+      <label className="text-xs font-medium text-gray-700">Grid</label>
+      <div className="flex jus">
         <div>
-          <span className="text-[9px] text-gray-500 mb-1 block">Columns (e.g., 1fr 1fr 1fr)</span>
           <input 
             type="text" className="w-full bg-white border border-gray-300 rounded px-2 py-1.5 text-[11px] font-mono"
             placeholder="1fr 1fr" value={s.gridTemplateColumns || ''} onChange={(e) => updateStyle({'gridTemplateColumns': e.target.value})}
           />
         </div>
         <div>
-          <span className="text-[9px] text-gray-500 mb-1 block">Rows</span>
           <input 
             type="text" className="w-full bg-white border border-gray-300 rounded px-2 py-1.5 text-[11px] font-mono"
             placeholder="auto" value={s.gridTemplateRows || ''} onChange={(e) => updateStyle({'gridTemplateRows': e.target.value})}
@@ -691,21 +688,41 @@ export const LayoutSettings = ({ activeElement, updateStyle }) => {
 
       {/* COMMON SETTINGS (Visible for Flex and Grid) */}
       {(s.display === 'flex' || s.display === 'grid') && (
-        <div className="mt-6 pt-4 border-t border-gray-200">
-          <label className={labelClass}>Gap (Spacing Between Items)</label>
-          <div className="grid grid-cols-2 gap-3">
-             <div className="relative">
-                <input 
-                  type="text" className="w-full bg-white border border-gray-300 rounded-md pl-2 pr-2 py-1.5 text-[11px] outline-none" 
-                  value={s.columnGap || ''} onChange={(e) => updateStyle({'columnGap': e.target.value})} placeholder="Horizontal" 
-                />
-             </div>
-             <div className="relative">
-                <input 
-                  type="text" className="w-full bg-white border border-gray-300 rounded-md pl-2 pr-2 py-1.5 text-[11px] outline-none" 
-                  value={s.rowGap || ''} onChange={(e) => updateStyle({'rowGap': e.target.value})} placeholder="Vertical" 
-                />
-             </div>
+        <div className="flex justify-between items-center gap-2 px-1 mt-2">
+          <label className="text-xs font-medium text-gray-700">Gap</label>
+          <div className="grid grid-rows-2 gap-3">
+  
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] text-gray-500">Horizontal</label>
+              <input 
+                type="range"
+                min="0"
+                max="100"
+                value={parseInt(s.columnGap) || 0}
+                onChange={(e) => updateStyle({ columnGap: `${e.target.value}px` })}
+                className="custom-slider h-1 w-full appearance-none cursor-pointer bg-gray-100 rounded-xs "
+              />
+              <span className="text-[10px] text-gray-400">
+                {s.columnGap || '0px'}
+              </span>
+            </div>
+
+            {/* Row Gap (Vertical) */}
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] text-gray-500">Vertical</label>
+              <input 
+                type="range"
+                min="0"
+                max="100"
+                value={parseInt(s.rowGap) || 0}
+                onChange={(e) => updateStyle({ rowGap: `${e.target.value}px` })}
+                className="custom-slider h-1 w-full appearance-none cursor-pointer bg-gray-100 rounded-xs"
+              />
+              <span className="text-[10px] text-gray-400">
+                {s.rowGap || '0px'}
+              </span>
+            </div>
+
           </div>
         </div>
       )}
