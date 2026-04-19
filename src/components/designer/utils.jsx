@@ -521,68 +521,102 @@ const FlexSettings = ({ s, updateStyle }) => (
         <SegmentButton options={['row', 'column']} property="flexDirection" updateStyle={updateStyle} />
       </div>
     </div>
-
-    {/* The Mini-Map Dots */}
-    <div className="flex flex-row items-center justify-end gap-2 py-1">
-      
-      <div className="grid grid-cols-3 from-gray-50 to-gray-100/50 rounded border border-gray-200/80  w-21 h-21 relative backdrop-blur-sm">
-  {[
-    { jc: 'flex-start', ai: 'flex-start' },
-    { jc: 'center', ai: 'flex-start' },
-    { jc: 'flex-end', ai: 'flex-start' },
-
-    { jc: 'flex-start', ai: 'center' },
-    { jc: 'center', ai: 'center' },
-    { jc: 'flex-end', ai: 'center' },
-
-    { jc: 'flex-start', ai: 'flex-end' },
-    { jc: 'center', ai: 'flex-end' },
-    { jc: 'flex-end', ai: 'flex-end' },
-  ].map((z, i) => {
-    const isActive =
-      s.justifyContent === z.jc && s.alignItems === z.ai;
-
-    return (
-      <button
-        key={i}
-        onClick={() => {
-          updateStyle({'justifyContent': z.jc,'alignItems': z.ai});
-          console.log(z.jc,z.ai)
-        }}
-        className="relative flex items-center justify-center group"
-      >
+    <div className="w-full flex items-center gap-2 justify-between">
+      <span className="text-xs font-medium text-gray-700">Align</span>
+      {/* The Mini-Map Dots */}
+      <div className="w-[75%] flex flex-row items-center justify-between gap-1 py-1">
         
+        <div className="grid grid-cols-3 from-gray-50 to-gray-100/50 rounded border border-gray-200/80  w-15 h-15 relative backdrop-blur-sm">
+          {[
+            { jc: 'flex-start', ai: 'flex-start' },
+            { jc: 'center', ai: 'flex-start' },
+            { jc: 'flex-end', ai: 'flex-start' },
 
-        {/* Hover ring effect */}
-        <div className="absolute w-7 h-7 transition-all duration-300 ease-out opacity-0 group-hover:opacity-100 group-hover:border group-hover:border-blue-300/50 group-hover:scale-110" />
+            { jc: 'flex-start', ai: 'center' },
+            { jc: 'center', ai: 'center' },
+            { jc: 'flex-end', ai: 'center' },
 
-        {/* Mini flex preview with smooth transitions */}
-        <div
-          className={`w-7 h-7 rounded border flex overflow-hidden border-gray-200/70 bg-white/90 hover:bg-white hover:border-gray-400 hover:scale-105 hover:shadow-sm transition-all duration-300 ease-out `}
-          style={{
-            display: 'flex',
-            justifyContent: z.jc,
-            alignItems: z.ai,
-            transition: 'justify-content 0.3s ease-out, align-items 0.3s ease-out',
-          }}
-        >
-          {/* Flex items - only visible when active */}
-          <div className={`w-1.5 h-3 rounded-xs m-px transition-all duration-300 align-bottom ${
-            isActive ? 'bg-blue-600 scale-110 opacity-100' : 'bg-transparent opacity-0'
-          }`} />
-          <div className={`w-1.5 h-1.5 rounded-xs m-px transition-all duration-300 ${
-            isActive ? 'bg-blue-500 scale-110 opacity-100' : 'bg-transparent opacity-0'
-          }`} />
+            { jc: 'flex-start', ai: 'flex-end' },
+            { jc: 'center', ai: 'flex-end' },
+            { jc: 'flex-end', ai: 'flex-end' },
+          ].map((z, i) => {
+            const isActive =
+              s.justifyContent === z.jc && s.alignItems === z.ai;
+
+            return (
+              <button
+                key={i}
+                onClick={() => {
+                  updateStyle({'justifyContent': z.jc,'alignItems': z.ai});
+                  console.log(z.jc,z.ai)
+                }}
+                className="relative flex items-center justify-center group"
+              >
+                
+
+                {/* Hover ring effect */}
+                <div className="absolute w-5 h-5 transition-all duration-300 ease-out opacity-0 group-hover:opacity-100 group-hover:border group-hover:border-blue-300/50 group-hover:scale-110" />
+
+                {/* Mini flex preview with smooth transitions */}
+                <div
+                  className={`w-5 h-5 rounded border flex overflow-hidden border-gray-200/70 bg-white/90 hover:bg-white hover:border-gray-400 hover:scale-105 hover:shadow-sm transition-all duration-300 ease-out `}
+                  style={{
+                    display: 'flex',
+                    justifyContent: z.jc,
+                    alignItems: z.ai,
+                    transition: 'justify-content 0.3s ease-out, align-items 0.3s ease-out',
+                  }}
+                >
+                  {/* Flex items - only visible when active */}
+                  <div className={`w-1.5 h-2.5 rounded-xs m-px transition-all duration-300 align-bottom ${
+                    isActive ? 'bg-blue-600 scale-110 opacity-100' : 'bg-transparent opacity-0'
+                  }`} />
+                  <div className={`w-1.5 h-1.5 rounded-xs m-px transition-all duration-300 ${
+                    isActive ? 'bg-blue-500 scale-110 opacity-100' : 'bg-transparent opacity-0'
+                  }`} />
+                </div>
+              </button>
+            );
+          })}
         </div>
-      </button>
-    );
-  })}
-      </div>
-      <div className="flex flex-col gap-2">
-       <button onClick={() => updateStyle({'justifyContent': 'space-between'})} className={`py-1.5 text-[9px] font-bold rounded border ${s.justifyContent === 'space-between' ? 'bg-blue-50 border-blue-400 text-blue-700' : 'bg-white text-gray-500'}`}>Space Between</button>
-       <button onClick={() => updateStyle({'alignItems': 'stretch'})} className={`py-1.5 text-[9px] font-bold rounded border ${s.alignItems === 'stretch' ? 'bg-blue-50 border-blue-400 text-blue-700' : 'bg-white text-gray-500'}`}>Stretch Fill</button>
-      </div>
-    </div>    
+
+        <div className="flex flex-col gap-2 w-[55%]">
+          <div className="px-1 border border-gray-200 rounded-md bg-white shadow-sm flex items-center justify-between">
+            <span className="text-[11px] text-gray-500 font-medium capitalize text-center w-[80%]">
+              {s.justifyContent}
+            </span>
+            <OptionsPopover>
+              {['flex-start', 'center', 'flex-end', 'space-between', 'space-around', 'space-evenly'].map(option => (
+                <button
+                  key={option}
+                  onClick={() => updateStyle({'justifyContent': option})}
+                  className="text-[11px] px-0.5 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+                >
+                  {option}
+                </button>
+              ))}
+            </OptionsPopover>
+          </div>
+          <div className="px-1  border border-gray-200 rounded-md bg-white shadow-sm flex items-center justify-between">
+            <span className="text-[11px] text-gray-500 font-medium capitalize text-center w-[80%]">
+              {s.alignItems}
+            </span>
+            <OptionsPopover>
+              {['flex-start', 'center', 'flex-end', 'stretch'].map(option => (
+                <button
+                  key={option}
+                  onClick={() => updateStyle({'alignItems': option})}
+                  className="text-[11px] px-0.5 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded transition-colors"
+                >
+                  {option}
+                </button>
+              ))}
+            </OptionsPopover>
+          </div>
+        </div>
+      </div>    
+    </div>
+
   </div>
 );
 
@@ -627,7 +661,7 @@ export const LayoutSettings = ({ activeElement, updateStyle }) => {
               
               <SegmentButton options={['block', 'flex', 'grid', 'none']} property="display" updateStyle={updateStyle} />
 
-              <div className="w-px h-4 bg-gray-200 mx-1" /> {/* Subtle Divider */}
+              <div className="w-px h-4 bg-gray-200 ml-1" /> {/* Subtle Divider */}
 
                 <OptionsPopover>
                   {['inline', 'inline-block', 'inline-flex', 'inline-grid'].map(option => (
